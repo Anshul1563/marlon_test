@@ -193,6 +193,7 @@ class SumoEnvironment(gym.Env):
         self.observations = {ts: None for ts in self.ts_ids}
         self.rewards = {ts: None for ts in self.ts_ids}
 
+
     def _start_simulation(self):
         sumo_cmd = [
             self._sumo_binary,
@@ -206,7 +207,14 @@ class SumoEnvironment(gym.Env):
             str(self.waiting_time_memory),
             "--time-to-teleport",
             str(self.time_to_teleport),
+            "--summary",
+            f"model_comparision/Summary_A2C.xml",
+            "--queue-output",
+            f"model_comparision/QueueInfo_A2C.xml",
+            "--tripinfo-output",
+            f"model_comparision/VehicleInfo_A2C.xml"
         ]
+        print(sumo_cmd)
         if self.begin_time > 0:
             sumo_cmd.append(f"-b {self.begin_time}")
         if self.sumo_seed == "random":
@@ -312,10 +320,14 @@ class SumoEnvironment(gym.Env):
 
         observations = self._compute_observations()
         rewards = self._compute_rewards()
+        reward_values = rewards.values()
+        total_reward = sum(reward_values)
+        
         dones = self._compute_dones()
         terminated = False  # there are no 'terminal' states in this environment
         truncated = dones["__all__"]  # episode ends when sim_step >= max_steps
         info = self._compute_info()
+        info["total_reward"] = total_reward
 
         if self.single_agent:
             return observations[self.ts_ids[0]], rewards[self.ts_ids[0]], terminated, truncated, info
@@ -495,6 +507,7 @@ class SumoEnvironmentPZ(AECEnv, EzPickle):
     """
 
     metadata = {"render.modes": ["human", "rgb_array"], "name": "sumo_rl_v0", "is_parallelizable": True}
+    
 
     def __init__(self, **kwargs):
         """Initialize the environment."""

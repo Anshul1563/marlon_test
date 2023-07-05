@@ -34,7 +34,7 @@ if __name__ == "__main__":
     prs.add_argument("-d", dest="decay", type=float, default=1.0, required=False, help="Epsilon decay.\n")
     prs.add_argument("-mingreen", dest="min_green", type=int, default=10, required=False, help="Minimum green time.\n")
     prs.add_argument("-maxgreen", dest="max_green", type=int, default=50, required=False, help="Maximum green time.\n")
-    prs.add_argument("-gui", action="store_true", default=False, help="Run with visualization on SUMO.\n")
+    prs.add_argument("-gui", action="store_true", default=True, help="Run with visualization on SUMO.\n")
     prs.add_argument("-fixed", action="store_true", default=False, help="Run with fixed timing traffic signals.\n")
     prs.add_argument("-ns", dest="ns", type=int, default=42, required=False, help="Fixed green time for NS.\n")
     prs.add_argument("-we", dest="we", type=int, default=42, required=False, help="Fixed green time for WE.\n")
